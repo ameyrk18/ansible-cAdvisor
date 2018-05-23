@@ -1,0 +1,16 @@
+---
+
+user_name: root
+group_name: root
+port_number: 8572
+version_number: v0.29.0
+repo_owner: google
+repo_name: cadvisor
+release_name: cadvisor
+download_url: https://github.com/{{repo_owner}}/{{repo_name}}/releases/download/{{ version_number }}/{{release_name}}
+local_sym_link_path: /usr/local/bin
+
+install_path:         /opt/cadvisor
+config_path:          /etc/cadvisor
+log_path:             /var/log/cadvisor
+

@@ -1,0 +1,16 @@
+[Unit]
+Description=cAdvisor - Docker container metrics.
+After=network.target
+
+[Service]
+User={{ user_name }}
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+
+ExecStart={{local_sym_link_path}}/{{release_name}} --port={{ port_number }} --log_dir={{ log_path }}
+ExecStop=pkill {{release_name}}
+TimeoutStartSec=15m
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

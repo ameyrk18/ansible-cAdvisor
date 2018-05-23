@@ -1,0 +1,46 @@
+---
+# file: tasks/main.yml
+
+- name: mkdir for general cases
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ group_name }}"
+    mode: "u=rwx,g=rx,o="
+  with_items:
+    - "{{ install_path }}"
+    - "{{ config_path }}"
+    - "{{ log_path }}"
+
+- name: download cAdvisor
+  get_url:
+    url: "{{ download_url }}"
+    dest: "{{ install_path }}/{{release_name}}"
+    mode: 0755
+    
+- name: set permissions, owner and group
+  file:
+    path: "{{ install_path }}"
+    state: directory
+    owner: "{{ user_name }}"
+    group: "{{ group_name }}"
+    mode: "go-w"
+    recurse: yes
+  changed_when: false
+
+- name: Create symbolic link
+  file:
+    src: "{{ install_path }}/{{release_name}}"
+    dest: "{{local_sym_link_path}}/{{release_name}}"
+    state: link
+  
+- name: copy systemd config
+  template: src="../templates/{{release_name}}.service.j2"  dest="/etc/systemd/system/{{release_name}}.service"
+  notify: restart {{release_name}}
+
+- name: cadvisor enable service
+  service:
+    name: "{{release_name}}.service"
+    state: started
+    enabled: yes
