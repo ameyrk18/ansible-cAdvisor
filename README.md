@@ -1,2 +1,2 @@
 # ansible-cAdvisor
-Ansible to install cAdvisor on linux host
+Ansible role to install cAdvisor on linux host
